@@ -100,7 +100,6 @@ const addProduct = asyncHandler(async (req, res) => {
 const editProduct = asyncHandler(async (req, res) => {
   const { name, price, description, image, brand, category, countInStock } =
     req.body;
-  console.log(req.body);
   const user = req.user_id;
   const existingProdcut = await Product.findById(req.params.id);
   if (existingProdcut) {

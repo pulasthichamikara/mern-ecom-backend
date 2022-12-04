@@ -16,7 +16,7 @@ const dataUrl = 'https://dummyjson.com/products?limit=20';
 }); */
 
 const addDummyData = asyncHandler(async (req, res) => {
-  await axios
+  /*   await axios
     .get(dataUrl, {
       headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' },
     })
@@ -27,13 +27,13 @@ const addDummyData = asyncHandler(async (req, res) => {
     })
     .catch((error) => {
       console.log(error);
-    });
+    }); */
 });
 
 const savedata = asyncHandler(async (data, req, res) => {
   data.products.map(async (item) => {
     const image = await saveImage(item.images[0]);
-    console.log('image', image);
+
     const productData = {
       name: item.title,
       price: item.price,

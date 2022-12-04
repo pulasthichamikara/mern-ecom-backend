@@ -19,7 +19,6 @@ router.post('/', upload.single('image'), async (req, res) => {
 
   await uploadBytes(imageRef, file.buffer, metatype)
     .then((snapshot) => {
-      console.log(snapshot);
       res.send(snapshot.metadata.name);
     })
     .catch((error) => console.log(error.message));
@@ -45,7 +44,7 @@ router.get('/pictures', async (req, res) => {
 
 router.delete('/delete', async (req, res) => {
   const deletePic = req.body.name;
-  console.log(deletePic);
+
   const deleteRef = ref(storage, deletePic);
   await deleteObject(deleteRef)
     .then(() => {
