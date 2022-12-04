@@ -14,7 +14,9 @@ import firebaseFileupload from './routes/firebaseFileUpload.js';
 /* import path from 'path'; */
 
 dotenv.config();
-connectDB();
+connectDB().then(() => {
+  app.listen(process.env.PORT || 4000, console.log('running backend'));
+});
 
 const app = express();
 app.use(cors());
@@ -22,7 +24,6 @@ if (process.env.NODE_ENV === 'dev') {
   app.use(morgan('dev'));
 }
 app.use(express.json());
-app.listen(process.env.PORT || 4000, console.log('running backend'));
 
 app.get('/', (req, res) => {
   res.send('running');
