@@ -29,7 +29,7 @@ const addDummyData = asyncHandler(async (req, res) => {
       console.log(error);
     }); */
 });
-
+/* 
 const savedata = asyncHandler(async (data, req, res) => {
   data.products.map(async (item) => {
     const image = await saveImage(item.images[0]);
@@ -54,7 +54,7 @@ const savedata = asyncHandler(async (data, req, res) => {
     return res.json({ message: 'done' });
   });
 });
-
+ */
 /* const saveImage = asyncHandler(async (url, req, res) => {
   const response = await fetch(url);
   const buffer = await response.buffer();
@@ -71,7 +71,7 @@ const savedata = asyncHandler(async (data, req, res) => {
   return imgName;
 }); */
 
-const saveImage = asyncHandler(async (url, req, res) => {
+/* const saveImage = asyncHandler(async (url, req, res) => {
   const response = await fetch(url);
   const buffer = await response.buffer();
 
@@ -84,6 +84,6 @@ const saveImage = asyncHandler(async (url, req, res) => {
       res.send(snapshot.metadata.name);
     })
     .catch((error) => console.log(error.message));
-});
+}); */
 
-export { addDummyData };
+//export { addDummyData };

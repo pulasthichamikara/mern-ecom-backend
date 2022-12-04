@@ -9,10 +9,9 @@ import orderRoutes from './routes/orderRoutes.js';
 import { NotFound, ErrorHandler } from './middleware/errorHandler.js';
 import morgan from 'morgan';
 
-import fileUpload from './routes/fileUpload.js';
+/* import fileUpload from './routes/fileUpload.js'; */
 import firebaseFileupload from './routes/firebaseFileUpload.js';
-import path from 'path';
-import { addDummyData } from './controller/dataInsert.js';
+/* import path from 'path'; */
 
 dotenv.config();
 connectDB();
@@ -28,8 +27,6 @@ app.listen(process.env.PORT || 4000, console.log('running backend'));
 app.get('/', (req, res) => {
   res.send('running');
 });
-
-/* app.get('/api/uploadtest', addDummyData); */
 
 app.use('/api/products', ProductRoutes);
 app.use('/api/users', userRoutes);
