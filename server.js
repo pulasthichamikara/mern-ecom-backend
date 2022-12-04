@@ -23,13 +23,13 @@ if (process.env.NODE_ENV === 'dev') {
   app.use(morgan('dev'));
 }
 app.use(express.json());
-app.listen(4000, console.log('running backend'));
+app.listen(process.env.PORT || 4000, console.log('running backend'));
 
 app.get('/', (req, res) => {
   res.send('running');
 });
 
-app.get('/api/uploadtest', addDummyData);
+/* app.get('/api/uploadtest', addDummyData); */
 
 app.use('/api/products', ProductRoutes);
 app.use('/api/users', userRoutes);
