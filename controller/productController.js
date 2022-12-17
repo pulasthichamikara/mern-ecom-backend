@@ -24,6 +24,8 @@ const getProducts = asyncHandler(async (req, res) => {
       searchQuery.category = query.category;
     }
 
+    console.log('searchQuery', searchQuery)
+
     // sorting
     let key = 'createdAt';
     let sortOrder = -1;
