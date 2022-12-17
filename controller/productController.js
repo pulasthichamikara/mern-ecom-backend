@@ -1,4 +1,3 @@
-import e from 'express';
 import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 import { deleteFirebaseImg } from '../routes/firebaseFileUpload.js';
@@ -6,34 +5,55 @@ import { deleteFirebaseImg } from '../routes/firebaseFileUpload.js';
 //@desc fetch all products
 //@route GET /api/products
 //@access public
-const getProducts = asyncHandler(async (req, res) => {
-  const perPage = 20;
-  const page = Number(req.query.pageNumber) || 1;
-  const keyword =
-    req.query.q != ''
-      ? {
-          name: {
-            $regex: req.query.q,
-            $options: 'i',
-          },
-        }
-      : {};
-  const productCount = await Product.count({ ...keyword });
 
-  const products = await Product.find({ ...keyword })
-    .sort({ createdAt: -1 })
-    .limit(perPage)
-    .skip((page - 1) * perPage);
-  /* 
-    .limit(perPage)
-    D */
-  const pages = Math.ceil(productCount / perPage);
-  res.json({ products, page, pages });
+const getProducts = asyncHandler(async (req, res) => {
+  try {
+    const page = Number(req.query.pageNumber) || 1;
+    const query = req.query;
+    const searchQuery = {};
+
+    const perPage = query.hasOwnProperty('perPage') ? Number(query.perPage) : 8;
+
+    if (query.hasOwnProperty('q') && query.q)
+      searchQuery.name = { $regex: query.q, $options: 'i' };
+
+    if (query.hasOwnProperty('max') && query.max) {
+      searchQuery.price = { $lt: query.max };
+    }
+    if (query.hasOwnProperty('category') && query.category) {
+      searchQuery.category = query.category;
+    }
+
+    // sorting
+    let key = 'createdAt';
+    let sortOrder = -1;
+
+    if (query.hasOwnProperty('sort') && query.sort) {
+      key = query.sort;
+      if (query.sort === 'price' || query.sort === 'reviews') {
+        sortOrder = 1;
+      }
+    }
+
+    const products = await Product.find({ ...searchQuery })
+
+      .sort({ [key]: sortOrder })
+      .limit(perPage)
+      .skip((page - 1) * perPage);
+
+    const productCount = await Product.count({ ...searchQuery });
+    const pages = Math.ceil(productCount / perPage);
+
+    res.json({ products, page, pages });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 //@desc fetch single products
 //@route GET /api/products/:id
 //@access public
+
 const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
@@ -48,6 +68,7 @@ const getProductById = asyncHandler(async (req, res) => {
 //@desc fetch top rated products
 //@route GET /api/products/top
 //@access public
+
 const topRatedProducts = asyncHandler(async (req, res) => {
   const product = await Product.find({}).sort({ totalRating: -1 }).limit(3);
 
@@ -62,6 +83,7 @@ const topRatedProducts = asyncHandler(async (req, res) => {
 //@desc delete user
 //@route delete /api/users/:id
 //@access private
+
 const deleteProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product) {
@@ -78,6 +100,7 @@ const deleteProductById = asyncHandler(async (req, res) => {
 //@desc add product
 //@route post /api/products/
 //@access private
+
 const addProduct = asyncHandler(async (req, res) => {
   const productData = req.body;
   const user = req.user._id;
@@ -97,6 +120,7 @@ const addProduct = asyncHandler(async (req, res) => {
 //@desc edit product
 //@route put /api/products/:id
 //@access private
+
 const editProduct = asyncHandler(async (req, res) => {
   const { name, price, description, image, brand, category, countInStock } =
     req.body;
