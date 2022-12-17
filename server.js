@@ -35,17 +35,9 @@ app.use('/api/orders', orderRoutes);
 app.get('/api/config/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID);
 });
+
 /* upload  */
-/* const __dirname = path.resolve();
-app.use('/uploads', express.static(path.join('/uploads'))); */
-
-// const __dirname = path.resolve();
-// app.use('/api/uploadsDirect/', express.static(__dirname + '/uploads'), fileUpload);
-// console.log(path.join(__dirname));
-
 app.use('/api/uploads/', firebaseFileupload);
-
-/* end uplolad */
 
 app.use(NotFound);
 
